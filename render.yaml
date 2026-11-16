@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: kraalink
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: KRAALINK_DEMO
+        value: "true"
+      - key: KRAALINK_JWT_KEY
+        generateValue: true
+      - key: KRAALINK_ENC_KEY
+        generateValue: true
+      # Free plan has an ephemeral filesystem: SQLite and uploads reset on deploy or restart.
+      # For persistent data, change plan to starter and mount a disk at /var/data, then set:
+      #   KRAALINK_DATA=/var/data
+      #   KRAALINK_DB=/var/data/kraalink.db
+      #   KRAALINK_STORAGE=/var/data/storage
+      # and add a disk block:
+      # disks:
+      #   - name: data
+      #     mountPath: /var/data
+      #     sizeGB: 1
